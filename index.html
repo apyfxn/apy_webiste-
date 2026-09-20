@@ -2440,7 +2440,11 @@ function movePill(){
   pill.style.width = on.offsetWidth + 'px';
   pill.style.transform = 'translateX(' + on.offsetLeft + 'px)';
 }
-function go(id, keepScroll){
+var currentView = document.querySelector('.view.on').id;
+var routeKey = 'apyView';
+if('scrollRestoration' in history) history.scrollRestoration = 'manual';
+function showView(id, keepScroll){
+  currentView = id;
   views.forEach(function(v){ v.classList.toggle('on', v.id === id); });
   segBtns.forEach(function(b){
     if(b.dataset.go === ((id === 'works' || id === 'brands') ? 'home' : id)) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
@@ -2449,6 +2453,39 @@ function go(id, keepScroll){
   if(!keepScroll) window.scrollTo(0,0);
   reveal();
 }
+function saveRouteScroll(){
+  var state = Object.assign({}, history.state);
+  state[routeKey] = currentView;
+  state.scrollY = window.scrollY;
+  history.replaceState(state, '');
+}
+function go(id, keepScroll){
+  if(id === currentView) return;
+  saveRouteScroll();
+  history.pushState({apyView:id, scrollY:0, fromView:currentView}, '');
+  showView(id, keepScroll);
+}
+function restoreRoute(state){
+  var id = state && state[routeKey];
+  if(!Array.prototype.some.call(views, function(v){ return v.id === id; })) return;
+  showView(id, true);
+  window.scrollTo(0, state.scrollY || 0);
+}
+function backFromMore(section){
+  if(history.state && history.state.fromView === 'home'){
+    history.back();
+  } else {
+    go('home', true);
+    var target = document.getElementById(section);
+    if(target) target.scrollIntoView();
+  }
+}
+window.addEventListener('popstate', function(e){ restoreRoute(e.state); });
+// Wait until the grids and reveal observer are initialized before restoring a reload.
+var initialRoute = history.state;
+if(!initialRoute || !initialRoute[routeKey]) saveRouteScroll();
+window.addEventListener('load', function(){ restoreRoute(initialRoute); });
+window.addEventListener('pagehide', saveRouteScroll);
 document.querySelectorAll('[data-go]').forEach(function(b){
   b.addEventListener('click', function(e){ e.preventDefault(); go(b.dataset.go); });
 });
@@ -2519,9 +2556,7 @@ function setBrandCat(name){
   brandBar.appendChild(b); brandBtns.push(b);
 });
 document.getElementById('backBrands').addEventListener('click', function(){
-  go('home', true);
-  var c = document.getElementById('clients');
-  if(c) c.scrollIntoView();
+  backFromMore('clients');
 });
 
 /* ---------- work tiles ---------- */
@@ -2637,9 +2672,7 @@ renderAll('All');
 
 /* back to the Work section on the home page */
 document.getElementById('backWork').addEventListener('click', function(){
-  go('home', true);
-  var w = document.getElementById('work');
-  if(w) w.scrollIntoView();
+  backFromMore('work');
 });
 
 /* ---------- contact modal ---------- */
