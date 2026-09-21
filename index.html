@@ -47,7 +47,7 @@
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
 *,*::before,*::after{box-sizing:border-box}
-html{scroll-padding-top:calc(72px + env(safe-area-inset-top,0px));-webkit-text-size-adjust:100%}
+html{scrollbar-gutter:stable;scroll-padding-top:calc(72px + env(safe-area-inset-top,0px));-webkit-text-size-adjust:100%}
 body{
   margin:0;background:var(--bg);color:var(--ink);
   font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
@@ -290,7 +290,7 @@ h3{font-size:20px;letter-spacing:-.02em;line-height:1.25}
 .feature p{margin:0;color:rgba(245,245,247,.6);font-size:14.5px;line-height:1.55}
 
 /* each extension explanation gets its own outer box; the copy sits in an inner box */
-.detail-shell{padding:clamp(20px,2.4vw,28px);border-radius:var(--radius-xl);border:1px solid var(--line);background:linear-gradient(170deg,rgba(255,255,255,.04),rgba(255,255,255,.01));margin-top:30px}
+.detail-shell{padding:clamp(20px,2.4vw,28px);border-radius:var(--radius-xl);border:1px solid var(--line);background:linear-gradient(170deg,rgba(255,255,255,.04),rgba(255,255,255,.01));margin-top:20px}
 .detail-copy{display:flex;flex-direction:column;padding:clamp(18px,2vw,24px);border-radius:var(--radius-lg,20px);border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.025)}
 .detail-copy .lead{margin-top:14px}
 .detail-copy .feature-list{flex:1;justify-content:center}
@@ -475,7 +475,7 @@ footer{border-top:1px solid var(--line);padding:38px 0 46px;color:var(--muted);f
 .side-visual p{color:var(--muted);font-size:13px;text-align:center;margin:2px 0 0}
 .status-chip{display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:999px;font-size:12.5px;font-weight:600;border:1px solid var(--line);background:rgba(255,255,255,.06);color:#c9c9d2}
 .status-chip.live{background:rgba(48,209,88,.14);border-color:rgba(48,209,88,.35);color:#5be07f}
-.detail{scroll-margin-top:110px;padding-top:clamp(50px,7vw,84px)}
+.detail{scroll-margin-top:110px;padding-top:0}
 .detail-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .detail-head .sq{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;font-size:22px;font-weight:700;letter-spacing:-.05em;border:1px solid rgba(255,255,255,.16)}
 .rule{height:1px;background:var(--line);margin-top:clamp(50px,7vw,80px)}
@@ -569,7 +569,7 @@ body:has(#home.on):not(.intro-revealed) .nav{opacity:0;visibility:hidden;pointer
 #home .hero-inner{width:94%;max-width:none;min-width:0;gap:0;transform:translateY(0);transition:transform .85s cubic-bezier(.2,.8,.2,1)}
 #home .hero h1{max-width:none;width:100%;font-size:clamp(24px,7vw,120px);line-height:1.15;letter-spacing:-.055em;font-weight:800;white-space:nowrap;background:none;color:#f5f5f2}
 .frame-white{font-family:Inter,Arial,Helvetica,sans-serif;color:#f5f5f2}
-.feeling-blue{display:inline-block;padding:.12em .16em .28em .08em;margin:-.12em -.16em -.28em -.08em;line-height:1.25;vertical-align:baseline;font-family:Georgia,"Times New Roman",serif;font-weight:400;letter-spacing:-.065em;background:linear-gradient(110deg,#0061ff 0%,#087dff 18%,#20baff 34%,#b4f3ff 43%,#39d5ff 49%,#148aff 62%,#064dff 78%,#0061ff 100%);background-size:280% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;animation:feelingFlow 4.8s ease-in-out infinite alternate;filter:drop-shadow(0 0 .09em rgba(0,132,255,.2))}
+.feeling-blue{display:inline-block;padding:.12em .16em .28em .08em;margin:-.12em -.16em -.28em -.08em;line-height:1.25;vertical-align:baseline;font-family:Georgia,"Times New Roman",serif;font-weight:400;letter-spacing:-.065em;word-spacing:.02em;background:linear-gradient(110deg,#168fff 0%,#229fff 18%,#20baff 34%,#b4f3ff 43%,#39d5ff 49%,#249fff 62%,#168fff 78%,#168fff 100%);background-size:280% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;animation:feelingFlow 4.8s ease-in-out infinite alternate;filter:drop-shadow(0 0 .09em rgba(0,132,255,.2))}
 @keyframes feelingFlow{from{background-position:0% 50%}to{background-position:100% 50%}}
 .hero-details{position:absolute;top:100%;left:0;width:100%;padding-top:7px;margin-top:calc(-1 * clamp(4px,1vw,17px));opacity:0;visibility:hidden;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease,visibility .8s}
 .hero-identity{font-size:clamp(10px,1.1vw,15px);font-weight:500;letter-spacing:.15em;color:#b5b5bf;margin:0 0 26px}
@@ -678,6 +678,115 @@ html{scroll-behavior:smooth}
 }
 #deck .chip span{margin-top:0}
 @media(max-width:600px){#deck .chip{row-gap:8px;padding:10px 4px}}
+
+/* Compact contact buttons. Links retain their native navigation behavior. */
+#overlay .sheet{width:min(440px,100%);padding:32px 26px 26px;border-radius:24px;background:radial-gradient(ellipse at top left,rgba(10,132,255,.1),transparent 60%),#111115}
+#overlay .sheet h2{font-size:30px;letter-spacing:-.04em;padding-right:35px;margin-bottom:8px}
+#overlay .sheet .sub{font-size:13px;line-height:1.6;margin-bottom:24px;max-width:30ch}
+#overlay .contact-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#overlay .contact{min-height:50px;gap:10px;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.035);transform:none}
+#overlay .contact .ci{width:20px;height:20px;border-radius:0;background:none;border:0}
+#overlay .contact .ci svg{width:19px;height:19px;fill:currentColor}
+#overlay .contact .contact-label{font-size:13px;font-weight:600;color:#f5f5f7}
+#overlay .contact .ci{color:#a3a3b2}
+#overlay .contact .arw{font-size:17px;color:#767686}
+#overlay .contact:nth-child(-n+2){background:rgba(10,132,255,.12);border-color:rgba(49,168,255,.3);margin-bottom:10px}
+#overlay .contact:nth-child(-n+2) .ci,#overlay .contact:nth-child(-n+2) .arw{color:#52b5ff}
+#overlay .contact:hover{background:rgba(10,132,255,.18);border-color:rgba(49,168,255,.6);transform:translateY(-1px)}
+#overlay .close{width:30px;height:30px;top:18px;right:18px;background:rgba(255,255,255,.06)}
+@media(max-width:360px){#overlay .sheet{padding:28px 18px 20px}#overlay .contact{gap:7px;padding:11px 9px}#overlay .contact .contact-label{font-size:12px}}
+
+
+/* Original brand icons, three per row, with accessible link names. */
+#overlay .sheet{width:min(360px,100%)}
+#overlay .contact-buttons{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;justify-items:center;padding:4px 0}
+#overlay .contact,#overlay .contact:nth-child(-n+2){display:grid;place-items:center;width:64px;height:64px;min-height:0;padding:0;margin:0;border:0;border-radius:18px;background:none;position:relative;overflow:hidden;isolation:isolate}
+#overlay .contact .ci{width:64px;height:64px;border-radius:18px;color:#fff}
+#overlay .contact .ci svg{width:32px;height:32px;fill:#fff}
+#overlay .contact .ci.wa{background:#25d366}
+#overlay .contact .ci.em{background:#0071e3}
+#overlay .contact .ci.ig{background:linear-gradient(45deg,#f9ce34,#ee2a7b,#6228d7)}
+#overlay .contact .ci.tt{background:#000;border:1px solid rgba(255,255,255,.2)}
+#overlay .contact .ci.fb{background:#1877f2}
+#overlay .contact .ci.pin{background:#e60023}
+#overlay .contact:hover{background:none;transform:translateY(-2px);filter:brightness(1.08)}
+#overlay .primary-tray .contact::after{content:"";position:absolute;top:-30%;bottom:-30%;left:-65%;width:45%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);pointer-events:none;animation:contactIconSweep 4s ease-in-out infinite;animation-play-state:paused}
+#overlay.on .primary-tray .contact::after{animation-play-state:running}
+@keyframes contactIconSweep{0%,25%{transform:translateX(0) skewX(-20deg);opacity:0}35%{opacity:1}90%,100%{transform:translateX(500%) skewX(-20deg);opacity:0}}
+@media(prefers-reduced-motion:reduce){#overlay .contact::after{animation:none!important;display:none}}
+
+
+/* Shared rounded trays keep each set of three icons together. */
+#overlay .sheet{width:min(410px,100%);padding:32px 26px 28px}
+#overlay .contact-buttons{display:flex;flex-direction:column;gap:14px;padding:2px 0}
+#overlay .contact-tray{display:flex;align-items:center;justify-content:space-evenly;gap:12px;padding:18px 12px;border:1px solid rgba(255,255,255,.09);border-radius:22px;background:linear-gradient(150deg,rgba(255,255,255,.055),rgba(255,255,255,.015));box-shadow:inset 0 1px 0 rgba(255,255,255,.025)}
+#overlay .primary-tray{border-color:rgba(49,168,255,.22);background:radial-gradient(ellipse at 50% 0,rgba(10,132,255,.14),transparent 85%),rgba(255,255,255,.025);box-shadow:0 8px 30px rgba(0,113,227,.06),inset 0 1px 0 rgba(255,255,255,.045)}
+#overlay .contact,#overlay .contact:nth-child(-n+2),#overlay .contact .ci{width:58px;height:58px;border-radius:16px;flex-shrink:0}
+#overlay .contact .ci svg{width:29px;height:29px}
+#overlay .contact{transition:transform .2s ease,filter .2s ease;box-shadow:0 5px 12px rgba(0,0,0,.16)}
+@media(max-width:360px){#overlay .sheet{padding:28px 18px 22px}#overlay .contact-tray{gap:8px;padding:16px 8px}#overlay .contact,#overlay .contact:nth-child(-n+2),#overlay .contact .ci{width:52px;height:52px}}
+
+/* Refined contact sheet: neutral frosted surfaces and restrained highlights. */
+#overlay{background:rgba(0,0,0,.48);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+#overlay .sheet{
+  width:min(390px,100%);padding:32px 24px 24px;border-radius:30px;
+  border:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(155deg,rgba(43,44,49,.97),rgba(24,25,29,.98) 65%);
+  box-shadow:0 32px 90px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,255,255,.08);
+}
+#overlay .sheet h2{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;
+  font-size:29px;font-weight:650;letter-spacing:-.035em;line-height:1.15;
+  margin:0 0 8px;padding-right:30px;
+}
+#overlay .sheet .sub{font-size:13px;line-height:1.5;letter-spacing:-.01em;color:#a7a8ae;max-width:none;margin:0 0 26px}
+#overlay .close{top:18px;right:18px;width:28px;height:28px;background:rgba(255,255,255,.085);color:#c7c7cc}
+#overlay .close svg{width:12px;height:12px;stroke:#c7c7cc}
+#overlay .close:hover{background:rgba(255,255,255,.16);transform:none}
+#overlay .contact-buttons{gap:12px}
+#overlay .contact-tray,#overlay .primary-tray{
+  padding:19px 12px;gap:16px;border-radius:22px;
+  border:1px solid rgba(255,255,255,.065);
+  background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+}
+#overlay .contact,#overlay .contact:nth-child(-n+2),#overlay .contact .ci{width:56px;height:56px;border-radius:15px}
+#overlay .contact{box-shadow:0 3px 7px rgba(0,0,0,.18);transition:transform .22s ease,filter .22s ease}
+#overlay .contact .ci{box-shadow:inset 0 1px 0 rgba(255,255,255,.16)}
+#overlay .contact .ci svg{width:28px;height:28px}
+#overlay .contact:hover{transform:translateY(-2px) scale(1.035);filter:brightness(1.06)}
+#overlay .contact:active{transform:scale(.95)}
+#overlay .primary-tray .contact::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent)}
+@media(max-width:360px){
+  #overlay .sheet{padding:28px 18px 20px;border-radius:26px}
+  #overlay .contact-tray{padding:16px 10px;gap:10px}
+  #overlay .contact,#overlay .contact:nth-child(-n+2),#overlay .contact .ci{width:52px;height:52px}
+}
+@media(prefers-reduced-motion:reduce){#overlay .contact:hover,#overlay .contact:active{transform:none}}
+/* Tighter plugin introduction with a stronger heading and quieter description. */
+#plugins .plugins-intro h2{font-size:clamp(34px,5vw,58px);line-height:1.1}
+#plugins .plugins-intro > .lead{font-size:clamp(15px,1.6vw,18px);line-height:1.5;max-width:76ch}
+
+/* Plugin intro: calm static gradient headline, clear 3-level hierarchy. */
+#plugins .plugins-intro{position:relative;isolation:isolate}
+#plugins .plugins-intro::before{content:"";position:absolute;left:50%;top:-30px;width:min(760px,100%);height:220px;transform:translateX(-50%);z-index:-1;pointer-events:none;
+  background:radial-gradient(ellipse 50% 55% at 50% 45%,rgba(154,134,255,.16),transparent 72%);filter:blur(20px)}
+#plugins .plugins-intro h2{font-size:clamp(32px,4.6vw,54px);line-height:1.08;letter-spacing:-.04em;text-wrap:balance}
+#plugins .plugins-intro h2 .grad-text{
+  background-image:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.95) 50%,transparent 58%),linear-gradient(95deg,#ffffff 0%,#e4d4ff 38%,#b79bff 62%,#7fb4ff 100%);
+  background-size:260% 100%,100% 100%;background-repeat:no-repeat;background-position:100% 0,0 0;
+  animation:piShuttle 5.5s cubic-bezier(.45,.05,.35,1) infinite}
+@keyframes piShuttle{0%{background-position:100% 0,0 0}55%,100%{background-position:0% 0,0 0}}
+@media(prefers-reduced-motion:reduce){#plugins .plugins-intro h2 .grad-text{animation:none;background-position:100% 0,0 0}}
+#plugins .plugins-intro > .pi-lead{margin:18px auto 0;max-width:52ch;font-size:clamp(15px,1.5vw,17px);line-height:1.6;color:#9a9aa8;text-wrap:balance}
+.pi-lead b{font-weight:600;color:#e6e6ee}
+#plugins .plugins-intro .showcase{margin-top:44px}
+
+/* Smoothness: keep heavy blurred layers on the GPU so scrolling stays at the display's full refresh rate (60/120/144Hz). */
+.aurora{will-change:transform;transform:translateZ(0);backface-visibility:hidden}
+#plugins .plugins-intro::before{will-change:transform}
+.aurora span,.show-box,.detail-shell{backface-visibility:hidden}
+.view{-webkit-font-smoothing:antialiased}
 </style>
 </head>
 <body>
@@ -718,17 +827,17 @@ html{scroll-behavior:smooth}
     <div class="grid-3">
       <div class="card">
         <div class="ico"><svg viewBox="0 0 24 24"><path class="dash" d="M2 17c4 0 5-10 9-10s5 6 9 6"/><circle class="bob" cx="6" cy="14" r="2"/><circle cx="19" cy="12" r="2"/></svg></div>
-        <h3>Motion graphics</h3>
+        <h3>Motion Graphics</h3>
         <p>Kinetic typography, logo builds, lower thirds and transitions animated in After Effects with curves that feel natural, never robotic.</p>
       </div>
       <div class="card">
         <div class="ico"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path class="dash" d="M2 10h20M2 14h20"/><path class="bob" d="M9 3v3M15 18v3"/></svg></div>
-        <h3>Editing & pacing</h3>
+        <h3>Editing & Pacing</h3>
         <p>Music videos, fast-cut shorts, quiz formats and long-form. Every cut is timed to the beat, the breath or the punchline.</p>
       </div>
       <div class="card">
         <div class="ico"><svg viewBox="0 0 24 24"><circle class="spin" cx="12" cy="12" r="6"/><path class="dash" d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></div>
-        <h3>Colour & sound</h3>
+        <h3>Colour & Sound</h3>
         <p>Grading that sets the mood and a mix that sits right — dialogue forward, music under, no clipping on a phone speaker.</p>
       </div>
     </div>
@@ -790,10 +899,9 @@ html{scroll-behavior:smooth}
 
 <!-- ══════════ PLUGINS ══════════ -->
 <main class="view" id="plugins">
-  <section class="wrap" style="padding-top:clamp(48px,7vw,86px);padding-bottom:0;text-align:center">
-    <p class="eyebrow">Plugins &amp; extensions</p>
-    <h2><span class="grad-text">Panels I built for my own edits.</span></h2>
-    <p class="lead" style="margin:16px auto 0;text-align:center">Dockable panels for everyday editing in After Effects, Premiere Pro and Photoshop.</p>
+  <section class="wrap plugins-intro" style="padding-top:clamp(24px,3vw,38px);padding-bottom:0;text-align:center">
+    <h2><span class="grad-text">Personalized Panels for Editing</span></h2>
+    <p class="lead pi-lead">Dockable panels for everyday editing in <b>After Effects</b>, <b>Premiere Pro</b> and <b>Photoshop</b>.</p>
 
     <div class="showcase">
       <div class="show-box ae">
@@ -2468,7 +2576,7 @@ body { display:flex; justify-content:center; align-items:flex-start; }
     </div>
   </section>
 
-  <section class="wrap">
+  <section class="wrap" style="padding-top:20px;padding-bottom:clamp(40px,5vw,64px)">
     <div class="card" style="padding:clamp(28px,4vw,46px)">
       <h3 style="font-size:24px">Want one of these panels?</h3>
       <p style="margin-top:10px">Quick_PS installs into the CEP extensions folder and shows up under Window → Extensions. Message me for the build, or tell me what repetitive step is eating your day and I will add a button for it.</p>
@@ -2515,32 +2623,32 @@ body { display:flex; justify-content:center; align-items:flex-start; }
   <div class="sheet">
     <button class="close" id="closeContact" aria-label="Close contact"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     <h2 id="ctTitle">Let's talk</h2>
-    <p class="sub">Fastest on WhatsApp. Replies within a day.</p>
-    <div class="contact-list">
-      <a class="contact" href="https://wa.me/9779867339967" target="_blank" rel="noopener">
+    <p class="sub">Fastest on WhatsApp &amp; insta.</p>
+    <div class="contact-list contact-buttons">
+      <div class="contact-tray primary-tray" role="group" aria-label="Contact me"><a class="contact" href="https://wa.me/9779867339967" target="_blank" rel="noopener" aria-label="WhatsApp">
         <span class="ci wa"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wa"/></svg></span>
-        <span><b>WhatsApp</b><span>+977 9867339967</span></span><span class="arw">&#8250;</span>
+        
       </a>
-      <a class="contact" href="mailto:apyfx.np@gmail.com" id="mailLink">
+<a class="contact" href="mailto:apyfx.np@gmail.com" id="mailLink" aria-label="Email">
         <span class="ci em"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-mail"/></svg></span>
-        <span><b>Email</b><span>apyfx.np@gmail.com</span></span><span class="arw">&#8250;</span>
+        
       </a>
-      <a class="contact" href="https://www.instagram.com/apy.np/" target="_blank" rel="noopener">
+<a class="contact" href="https://www.instagram.com/apy.np/" target="_blank" rel="noopener" aria-label="Instagram">
         <span class="ci ig"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ig"/></svg></span>
-        <span><b>Instagram</b><span>@apy.np</span></span><span class="arw">&#8250;</span>
-      </a>
-      <a class="contact" href="https://www.tiktok.com/@apy.fx" target="_blank" rel="noopener">
+        
+      </a></div>
+      <div class="contact-tray" role="group" aria-label="More social links"><a class="contact" href="https://www.tiktok.com/@apy.fx" target="_blank" rel="noopener" aria-label="TikTok">
         <span class="ci tt"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tt"/></svg></span>
-        <span><b>TikTok</b><span>@apy.fx</span></span><span class="arw">&#8250;</span>
+        
       </a>
-      <a class="contact" href="https://www.facebook.com/anilpandey99" target="_blank" rel="noopener">
+<a class="contact" href="https://www.facebook.com/anilpandey99" target="_blank" rel="noopener" aria-label="Facebook">
         <span class="ci fb"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fb"/></svg></span>
-        <span><b>Facebook</b><span>anilpandey99</span></span><span class="arw">&#8250;</span>
+        
       </a>
-      <a class="contact" href="https://www.pinterest.com/apyfxnp" target="_blank" rel="noopener">
+<a class="contact" href="https://www.pinterest.com/apyfxnp" target="_blank" rel="noopener" aria-label="Pinterest">
         <span class="ci pin"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pin"/></svg></span>
-        <span><b>Pinterest</b><span>@apyfxnp</span></span><span class="arw">&#8250;</span>
-      </a>
+        
+      </a></div>
     </div>
   </div>
 </div>
