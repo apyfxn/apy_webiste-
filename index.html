@@ -107,7 +107,7 @@ h3{font-size:20px;letter-spacing:-.02em;line-height:1.25}
 
 /* ---------- hero ---------- */
 .hero{position:relative;min-height:calc(100svh - 64px);display:grid;place-items:center;text-align:center;overflow:hidden;padding:clamp(60px,10vh,110px) 0 80px}
-.aurora{position:absolute;inset:-25% -10% auto;height:120%;pointer-events:none;filter:blur(90px);opacity:.6;animation:hueDrift 18s linear infinite}
+.aurora{position:absolute;inset:-25% -10% auto;height:120%;pointer-events:none;filter:blur(90px);opacity:.6;animation:none}
 .aurora span{position:absolute;border-radius:50%;display:block}
 .a1{width:clamp(280px,46vw,620px);height:clamp(280px,46vw,620px);left:6%;top:4%;background:radial-gradient(circle,rgba(49,168,255,.55),transparent 65%);animation:drift 22s ease-in-out infinite alternate}
 .a2{width:clamp(240px,40vw,540px);height:clamp(240px,40vw,540px);right:4%;top:0;background:radial-gradient(circle,rgba(180,124,255,.5),transparent 65%);animation:drift 28s ease-in-out infinite alternate-reverse}
@@ -558,6 +558,80 @@ footer{border-top:1px solid var(--line);padding:38px 0 46px;color:var(--muted);f
   .brand-grid .logo-tile{height:96px;padding:14px}
   .brand-grid .logo-tile.flat{padding:14px}
 }
+
+/* Scroll introduction */
+.hero-stage > .aurora{inset:-20%;width:auto;max-width:none;height:140%;z-index:0}
+body:has(#home.on) .nav{position:fixed;left:0;right:0;transition:opacity .5s,visibility .5s}
+body:has(#home.on):not(.intro-revealed) .nav{opacity:0;visibility:hidden;pointer-events:none}
+#home.on{animation:none}
+#home .hero-intro{display:block;min-height:0;height:190svh;width:100%;max-width:none;overflow:visible;padding:0;background:#000;text-align:center}
+.hero-stage{position:sticky;top:0;width:100%;max-width:none;min-width:0;height:100svh;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;overflow:clip;isolation:isolate}
+#home .hero-inner{width:94%;max-width:none;min-width:0;gap:0;transform:translateY(0);transition:transform .85s cubic-bezier(.2,.8,.2,1)}
+#home .hero h1{max-width:none;width:100%;font-size:clamp(24px,7vw,120px);line-height:1.15;letter-spacing:-.055em;font-weight:800;white-space:nowrap;background:none;color:#f5f5f2}
+.frame-white{font-family:Inter,Arial,Helvetica,sans-serif;color:#f5f5f2}
+.feeling-blue{display:inline-block;padding:.12em .16em .28em .08em;margin:-.12em -.16em -.28em -.08em;line-height:1.25;vertical-align:baseline;font-family:Georgia,"Times New Roman",serif;font-weight:400;letter-spacing:-.065em;background:linear-gradient(110deg,var(--blue) 0%,var(--ps) 25%,#87cfff 45%,var(--blue-hi) 65%,var(--blue) 100%);background-size:250% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;animation:feelingFlow 7s ease-in-out infinite alternate}
+@keyframes feelingFlow{from{background-position:0% 50%}to{background-position:100% 50%}}
+.hero-details{position:absolute;top:100%;left:0;width:100%;padding-top:7px;margin-top:calc(-1 * clamp(4px,1vw,17px));opacity:0;visibility:hidden;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease,visibility .8s}
+.hero-identity{font-size:clamp(10px,1.1vw,15px);font-weight:500;letter-spacing:.15em;color:#b5b5bf;margin:0 0 26px}
+.intro-revealed #home .hero-inner{transform:translateY(-130px)}
+.intro-revealed .hero-details{opacity:1;visibility:visible;transform:translateY(0)}
+.hero-details .cta-row{opacity:0;transform:translateY(12px);transition:opacity .7s .18s,transform .7s .18s}
+.intro-revealed .hero-details .cta-row{opacity:1;transform:none}
+.hero-details .deck{opacity:0;transition:opacity .7s .3s}
+.intro-revealed .hero-details .deck{opacity:1}
+@media(max-width:600px){#home .hero h1{font-size:7vw}.hero-identity{letter-spacing:.07em}.hero-details{padding-top:6px}.hero-details .btn{font-size:13px;padding:12px 17px}.intro-revealed #home .hero-inner{transform:translateY(-115px)}}
+@media(max-height:520px){.intro-revealed #home .hero-inner{transform:translateY(-95px)}.hero-details .deck{display:none}}
+@media(prefers-reduced-motion:reduce){.feeling-blue{animation:none}#home .hero-inner,.hero-details,.hero-details .cta-row,.hero-details .deck{transition:none}}
+
+
+/* Center the letterforms and let scroll progress drive the reveal. */
+html{scroll-behavior:smooth}
+#home .hero h1{display:flex;align-items:baseline;justify-content:center;gap:.22em;transform:translateY(-.08em)}
+#home .hero-inner{transition:none!important;transform:translateY(var(--intro-shift,0px))!important}
+#home .hero-details{opacity:var(--intro-opacity,0);transform:translateY(var(--details-shift,22px));transition:none}
+#home .hero-details .cta-row{opacity:var(--cta-opacity,0);transform:translateY(var(--cta-shift,12px));transition:none}
+#home .hero-details .deck{opacity:var(--deck-opacity,0);transition:none}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+/* A single light sweep every three seconds. */
+.hire-shine{position:relative;overflow:hidden;isolation:isolate}
+.hire-shine::before{
+  content:"";position:absolute;inset:-50% auto -50% -80%;width:45%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.12) 30%,rgba(255,255,255,.55) 50%,rgba(255,255,255,.12) 70%,transparent);
+  transform:skewX(-20deg);pointer-events:none;
+  animation:hireLightSweep 3s ease-in-out infinite;
+  animation-play-state:paused;
+}
+.intro-revealed .hire-shine::before{animation-play-state:running}
+@keyframes hireLightSweep{
+  0%,68%{transform:translateX(0) skewX(-20deg);opacity:0}
+  72%{opacity:1}
+  96%{transform:translateX(490%) skewX(-20deg);opacity:1}
+  100%{transform:translateX(490%) skewX(-20deg);opacity:0}
+}
+@media(prefers-reduced-motion:reduce){.hire-shine::before{animation:none;display:none}}
+/* App boxes: three-second sweep in a six-second cycle. */
+#deck .chip{position:relative;overflow:hidden;isolation:isolate}
+#deck .chip::after{
+  content:"";position:absolute;top:-30%;bottom:-30%;left:-65%;width:45%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.018) 25%,rgba(255,255,255,.072) 50%,rgba(255,255,255,.018) 75%,transparent);
+  transform:translateX(0) skewX(-20deg);pointer-events:none;
+  animation:appBoxLightSweep 6s ease-in-out infinite;
+  animation-play-state:paused;
+}
+.intro-revealed #deck .chip::after{animation-play-state:running}
+@keyframes appBoxLightSweep{
+  0%{transform:translateX(0) skewX(-20deg);opacity:0}
+  5%{opacity:1}
+  45%{opacity:1}
+  50%,100%{transform:translateX(520%) skewX(-20deg);opacity:0}
+}
+@media(prefers-reduced-motion:reduce){#deck .chip::after{animation:none;display:none}}
+
+/* Limit compositing hints to the small set of continuously moving elements. */
+.aurora span{will-change:transform}
+#deck .chip{backdrop-filter:none;-webkit-backdrop-filter:none}
+.hero-idle .hero-intro *,.hero-idle .hero-intro *::before,.hero-idle .hero-intro *::after{animation-play-state:paused!important}
+
 </style>
 </head>
 <body>
@@ -578,23 +652,18 @@ footer{border-top:1px solid var(--line);padding:38px 0 46px;color:var(--muted);f
 <!-- ══════════ HOME ══════════ -->
 <main class="view on" id="home">
 
-  <div class="hero">
-    <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
-    <div class="wrap hero-inner">
-      <div class="badge"><i class="pulse"></i> Taking on new edits — Kathmandu, worldwide</div>
-      <h1><span class="grad-text">Cuts that hold attention.</span></h1>
-      <p class="lead">Video editing, motion graphics and typography animation for music, brands and creators. Cinematic pacing, clean grade, sound that lands.</p>
-      <div class="cta-row">
-        <a class="btn btn-primary" href="#work">See selected work</a>
-        <button class="btn btn-ghost js-contact">Start a project</button>
-      </div>
+  <div class="hero hero-intro"><div class="hero-stage"><div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div><div class="wrap hero-inner">
+    <h1><span class="frame-white">Every frame.</span> <em class="feeling-blue">a feeling.</em></h1>
+    <div class="hero-details" inert aria-hidden="true">
+      <p class="hero-identity">ANIL PANDEY - VIDEO EDITOR &amp; MOTION DESIGNER</p>
+      <div class="cta-row"><a class="btn btn-primary" href="#work">See selected work</a><button class="btn btn-ghost js-contact hire-shine">Hire me <span aria-hidden="true">&#8599;</span></button></div>
       <div class="deck" id="deck">
         <div class="chip ae"><b>Ae</b><span>After Effects</span></div>
         <div class="chip pr"><b>Pr</b><span>Premiere Pro</span></div>
         <div class="chip ps"><b>Ps</b><span>Photoshop</span></div>
       </div>
-    </div>
-  </div>
+
+    </div></div></div></div>
 
   <section class="wrap reveal">
     <p class="eyebrow">What I do</p>
@@ -2442,6 +2511,11 @@ function movePill(){
 }
 var currentView = document.querySelector('.view.on').id;
 var routeKey = 'apyView';
+var viewScrollPositions = {};
+function jumpToSavedScroll(y){
+  // Route changes must not inherit the smooth scrolling used by page links.
+  window.scrollTo({top:y, left:0, behavior:'instant'});
+}
 if('scrollRestoration' in history) history.scrollRestoration = 'manual';
 function showView(id, keepScroll){
   if(id === 'brands') setBrandCat('All');
@@ -2451,26 +2525,31 @@ function showView(id, keepScroll){
     if(b.dataset.go === ((id === 'works' || id === 'brands') ? 'home' : id)) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
   });
   movePill();
-  if(!keepScroll) window.scrollTo(0,0);
+  if(!keepScroll) jumpToSavedScroll(0);
   reveal();
 }
 function saveRouteScroll(){
   var state = Object.assign({}, history.state);
   state[routeKey] = currentView;
   state.scrollY = window.scrollY;
+  viewScrollPositions[currentView] = state.scrollY;
   history.replaceState(state, '');
 }
 function go(id, keepScroll){
   if(id === currentView) return;
   saveRouteScroll();
-  history.pushState({apyView:id, scrollY:0, fromView:currentView}, '');
-  showView(id, keepScroll);
+  var returningHome = id === 'home' && (currentView === 'works' || currentView === 'brands');
+  var destinationY = returningHome ? (viewScrollPositions.home || 0) : 0;
+  history.pushState({apyView:id, scrollY:destinationY, fromView:currentView}, '');
+  showView(id, keepScroll || returningHome);
+  if(returningHome) jumpToSavedScroll(destinationY);
 }
 function restoreRoute(state){
   var id = state && state[routeKey];
   if(!Array.prototype.some.call(views, function(v){ return v.id === id; })) return;
   showView(id, true);
-  window.scrollTo(0, state.scrollY || 0);
+  viewScrollPositions[id] = state.scrollY || 0;
+  jumpToSavedScroll(viewScrollPositions[id]);
 }
 function backFromMore(section){
   if(history.state && history.state.fromView === 'home'){
@@ -2478,7 +2557,8 @@ function backFromMore(section){
   } else {
     go('home', true);
     var target = document.getElementById(section);
-    if(target) target.scrollIntoView();
+    if(typeof viewScrollPositions.home === 'number') jumpToSavedScroll(viewScrollPositions.home);
+    else if(target) target.scrollIntoView({behavior:'instant'});
   }
 }
 window.addEventListener('popstate', function(e){ restoreRoute(e.state); });
@@ -2737,15 +2817,64 @@ function reveal(){ document.querySelectorAll('.reveal:not(.in)').forEach(functio
 reveal();
 
 var deck = document.getElementById('deck');
-if (deck && window.matchMedia('(pointer:fine)').matches && !window.matchMedia('(prefers-reduced-motion:reduce)').matches){
-  window.addEventListener('mousemove', function(e){
-    var x = (e.clientX / window.innerWidth - .5), y = (e.clientY / window.innerHeight - .5);
-    deck.querySelectorAll('.chip').forEach(function(c, i){
-      var d = (i - 1) * 6 + 10;
-      c.style.translate = (x * d) + 'px ' + (y * d * .6) + 'px';
+if(deck && matchMedia('(pointer:fine)').matches && !matchMedia('(prefers-reduced-motion:reduce)').matches){
+  var deckChips=Array.from(deck.querySelectorAll('.chip')), pointerFrame=0, pointerX=0, pointerY=0;
+  window.addEventListener('pointermove',function(e){
+    if(!document.body.classList.contains('intro-revealed') || document.body.classList.contains('hero-idle'))return;
+    pointerX=e.clientX;pointerY=e.clientY;
+    if(pointerFrame)return;
+    pointerFrame=requestAnimationFrame(function(){
+      pointerFrame=0;
+      var x=pointerX/innerWidth-.5,y=pointerY/innerHeight-.5;
+      deckChips.forEach(function(c,i){var d=(i-1)*6+10;c.style.translate=(x*d)+'px '+(y*d*.6)+'px';});
     });
-  });
+  },{passive:true});
 }
+// Suspend decorative loops while their sections are off screen or the tab is hidden.
+var heroVisible=true;
+function syncHeroActivity(){document.body.classList.toggle('hero-idle',!heroVisible || document.hidden);}
+new IntersectionObserver(function(entries){heroVisible=entries[0].isIntersecting;syncHeroActivity();}).observe(document.querySelector('.hero-intro'));
+var tracks=Array.from(document.querySelectorAll('.track'));
+var visibleTracks=new Set();
+function syncTracks(){tracks.forEach(function(t){t.style.animationPlayState=!document.hidden && visibleTracks.has(t)?'running':'paused';});}
+var trackObserver=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)visibleTracks.add(e.target);else visibleTracks.delete(e.target);});syncTracks();});
+tracks.forEach(function(t){trackObserver.observe(t);});
+document.addEventListener('visibilitychange',function(){syncHeroActivity();syncTracks();});
+</script>
+<script>
+(function(){
+  var hero=document.querySelector('.hero-intro'),details=document.querySelector('.hero-details');
+  var home=document.getElementById('home'),motion=matchMedia('(prefers-reduced-motion:reduce)');
+  var progress=0,target=0,frame=0,lastTime=0;
+  function clamp(v){return Math.max(0,Math.min(1,v));}
+  function paint(time){
+    var elapsed=lastTime?Math.min(time-lastTime,64):16;lastTime=time;
+    progress=motion.matches?target:progress+(target-progress)*(1-Math.exp(-elapsed/110));
+    if(Math.abs(target-progress)<.001)progress=target;
+    var ease=progress*progress*(3-2*progress);
+    var shift=innerHeight<=520?95:innerWidth<=600?115:130;
+    hero.style.setProperty('--intro-shift',(-shift*ease)+'px');
+    hero.style.setProperty('--intro-opacity',clamp((progress-.08)/.65));
+    hero.style.setProperty('--details-shift',(22*(1-ease))+'px');
+    hero.style.setProperty('--cta-opacity',clamp((progress-.25)/.65));
+    hero.style.setProperty('--cta-shift',(12*(1-ease))+'px');
+    hero.style.setProperty('--deck-opacity',clamp((progress-.4)/.6));
+    var visible=progress>.08 && home.classList.contains('on');
+    document.body.classList.toggle('intro-revealed',visible);
+    details.inert=progress<.65;details.setAttribute('aria-hidden',String(progress<.65));
+    if(progress!==target)frame=requestAnimationFrame(paint);else{frame=0;lastTime=0;}
+  }
+  function updateIntro(){
+    target=home.classList.contains('on')?clamp(-hero.getBoundingClientRect().top/(innerHeight*.55)):0;
+    if(!frame)frame=requestAnimationFrame(paint);
+  }
+  window.addEventListener('scroll',updateIntro,{passive:true});
+  window.addEventListener('resize',updateIntro);
+  window.addEventListener('load',updateIntro);
+  motion.addEventListener('change',updateIntro);
+  new MutationObserver(updateIntro).observe(home,{attributes:true,attributeFilter:['class']});
+  updateIntro();
+})();
 </script>
 </body>
 </html>
