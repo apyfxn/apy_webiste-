@@ -663,6 +663,21 @@ html{scroll-behavior:smooth}
 @media(prefers-reduced-motion:reduce){
   #home .grid-3 > .card::after{animation:none;display:none}
 }
+/* Services share the app boxes' fade timing, without a slide-up entrance. */
+#home > .craft-intro{opacity:var(--service-fade,0);transform:none!important;animation:none!important;transition:none!important}
+#home > .craft-intro .card{transform:none!important}
+@media(prefers-reduced-motion:reduce){#home > .craft-intro{opacity:1}}
+
+/* Shorter app boxes, with balanced spacing around the labels. */
+#deck .chip{
+  aspect-ratio:4 / 3;
+  grid-template-rows:auto auto;
+  align-content:center;
+  row-gap:12px;
+  padding:14px 6px;
+}
+#deck .chip span{margin-top:0}
+@media(max-width:600px){#deck .chip{row-gap:8px;padding:10px 4px}}
 </style>
 </head>
 <body>
@@ -694,9 +709,10 @@ html{scroll-behavior:smooth}
         <div class="chip ps"><b>Ps</b><span>Photoshop</span></div>
       </div>
 
+
     </div></div></div></div>
 
-  <section class="wrap reveal">
+  <section class="wrap craft-intro" aria-label="Services">
     <p class="eyebrow">What I do</p>
     <h2>Three things, done properly.</h2>
     <div class="grid-3">
@@ -2890,9 +2906,11 @@ document.addEventListener('visibilitychange',function(){syncHeroActivity();syncT
     hero.style.setProperty('--cta-opacity',clamp((progress-.25)/.65));
     hero.style.setProperty('--cta-shift',(12*(1-ease))+'px');
     hero.style.setProperty('--deck-opacity',clamp((progress-.4)/.6));
+
     var visible=progress>.08 && home.classList.contains('on');
     document.body.classList.toggle('intro-revealed',visible);
     details.inert=progress<.65;details.setAttribute('aria-hidden',String(progress<.65));
+
     if(progress!==target)frame=requestAnimationFrame(paint);else{frame=0;lastTime=0;}
   }
   function updateIntro(){
@@ -2905,6 +2923,30 @@ document.addEventListener('visibilitychange',function(){syncHeroActivity();syncT
   motion.addEventListener('change',updateIntro);
   new MutationObserver(updateIntro).observe(home,{attributes:true,attributeFilter:['class']});
   updateIntro();
+})();
+</script>
+<script>
+(function(){
+  var section=document.querySelector('.craft-intro');
+  var home=document.getElementById('home');
+  var motion=matchMedia('(prefers-reduced-motion:reduce)');
+  var frame=0;
+  function paint(){
+    frame=0;
+    if(!home.classList.contains('on'))return;
+    var top=section.getBoundingClientRect().top;
+    // Reveal across 40% of the viewport instead of completing on first entry.
+    var p=Math.max(0,Math.min(1,(innerHeight*.8-top)/(innerHeight*.4)));
+    var opacity=motion.matches?1:p*p*(3-2*p);
+    section.style.setProperty('--service-fade',opacity.toFixed(4));
+  }
+  function schedule(){if(!frame)frame=requestAnimationFrame(paint);}
+  window.addEventListener('scroll',schedule,{passive:true});
+  window.addEventListener('resize',schedule);
+  window.addEventListener('load',schedule);
+  motion.addEventListener('change',schedule);
+  new MutationObserver(schedule).observe(home,{attributes:true,attributeFilter:['class']});
+  paint();
 })();
 </script>
 </body>
