@@ -787,6 +787,13 @@ html{scroll-behavior:smooth}
 #plugins .plugins-intro::before{will-change:transform}
 .aurora span,.show-box,.detail-shell{backface-visibility:hidden}
 .view{-webkit-font-smoothing:antialiased}
+
+/* Labs: Spin the Wheel card */
+.lab-head{display:flex;align-items:center;gap:14px}
+.lab-head .ico{margin:0;flex:none}
+.lab-tool p{margin-top:14px}
+.lab-open{margin-top:18px;padding:10px 20px;font-size:14.5px}
+#labs .grid-3{grid-template-columns:minmax(0,380px);margin-top:32px}
 </style>
 </head>
 <body>
@@ -2590,11 +2597,8 @@ body { display:flex; justify-content:center; align-items:flex-start; }
   <section class="wrap" style="padding-top:clamp(48px,7vw,86px)">
     <p class="eyebrow">Labs</p>
     <h2>Websites, games and side builds.</h2>
-    <p class="lead" style="margin-top:16px">Computer science degree, video editor by trade. When an idea does not fit in a timeline, it becomes a web app or a small game.</p>
     <div class="grid-3">
-      <div class="card"><h3>Web builds</h3><p>Fast, single-page sites for creators and small brands — built by hand, no page builder, tuned to load instantly on mobile data.</p><span class="tag">Send me a slot to fill</span></div>
-      <div class="card"><h3>Browser games</h3><p>Small playable experiments: physics toys, arcade loops and jam entries that run straight in a tab.</p><span class="tag">In progress</span></div>
-      <div class="card"><h3>Automation scripts</h3><p>ExtendScript and JavaScript that take repetitive studio work — renaming, resizing, batch exporting — off a human's hands.</p><span class="tag">Ongoing</span></div>
+      <div class="card lab-tool"><div class="lab-head"><div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><circle cx="12" cy="13" r="1.6"/><path d="M12 5v5.4M12 15.6V21M4.9 9l4.7 2.7M14.4 14.3l4.7 2.7M4.9 17l4.7-2.7M14.4 11.7l4.7-2.7"/><path d="M12 1.6v3.4" stroke-width="2.2"/></svg></div><h3>Spin the Wheel</h3></div><p>A giveaway picker: add your entries, spin the wheel and pick a winner live.</p><a class="btn btn-primary lab-open" href="spin-the-wheel.html" target="_blank" rel="noopener">Spin the Wheel</a></div>
     </div>
     <div class="card" style="margin-top:22px;padding:clamp(28px,4vw,44px)">
       <h3 style="font-size:24px">Want one of these built for you?</h3>
