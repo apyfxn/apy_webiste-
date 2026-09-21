@@ -564,12 +564,12 @@ footer{border-top:1px solid var(--line);padding:38px 0 46px;color:var(--muted);f
 body:has(#home.on) .nav{position:fixed;left:0;right:0;transition:opacity .5s,visibility .5s}
 body:has(#home.on):not(.intro-revealed) .nav{opacity:0;visibility:hidden;pointer-events:none}
 #home.on{animation:none}
-#home .hero-intro{display:block;min-height:0;height:190svh;width:100%;max-width:none;overflow:visible;padding:0;background:#000;text-align:center}
+#home .hero-intro{display:block;min-height:0;height:160svh;width:100%;max-width:none;overflow:visible;padding:0;background:#000;text-align:center}
 .hero-stage{position:sticky;top:0;width:100%;max-width:none;min-width:0;height:100svh;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;overflow:clip;isolation:isolate}
 #home .hero-inner{width:94%;max-width:none;min-width:0;gap:0;transform:translateY(0);transition:transform .85s cubic-bezier(.2,.8,.2,1)}
 #home .hero h1{max-width:none;width:100%;font-size:clamp(24px,7vw,120px);line-height:1.15;letter-spacing:-.055em;font-weight:800;white-space:nowrap;background:none;color:#f5f5f2}
 .frame-white{font-family:Inter,Arial,Helvetica,sans-serif;color:#f5f5f2}
-.feeling-blue{display:inline-block;padding:.12em .16em .28em .08em;margin:-.12em -.16em -.28em -.08em;line-height:1.25;vertical-align:baseline;font-family:Georgia,"Times New Roman",serif;font-weight:400;letter-spacing:-.065em;background:linear-gradient(110deg,var(--blue) 0%,var(--ps) 25%,#87cfff 45%,var(--blue-hi) 65%,var(--blue) 100%);background-size:250% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;animation:feelingFlow 7s ease-in-out infinite alternate}
+.feeling-blue{display:inline-block;padding:.12em .16em .28em .08em;margin:-.12em -.16em -.28em -.08em;line-height:1.25;vertical-align:baseline;font-family:Georgia,"Times New Roman",serif;font-weight:400;letter-spacing:-.065em;background:linear-gradient(110deg,#0061ff 0%,#087dff 18%,#20baff 34%,#b4f3ff 43%,#39d5ff 49%,#148aff 62%,#064dff 78%,#0061ff 100%);background-size:280% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;animation:feelingFlow 4.8s ease-in-out infinite alternate;filter:drop-shadow(0 0 .09em rgba(0,132,255,.2))}
 @keyframes feelingFlow{from{background-position:0% 50%}to{background-position:100% 50%}}
 .hero-details{position:absolute;top:100%;left:0;width:100%;padding-top:7px;margin-top:calc(-1 * clamp(4px,1vw,17px));opacity:0;visibility:hidden;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease,visibility .8s}
 .hero-identity{font-size:clamp(10px,1.1vw,15px);font-weight:500;letter-spacing:.15em;color:#b5b5bf;margin:0 0 26px}
@@ -632,6 +632,37 @@ html{scroll-behavior:smooth}
 #deck .chip{backdrop-filter:none;-webkit-backdrop-filter:none}
 .hero-idle .hero-intro *,.hero-idle .hero-intro *::before,.hero-idle .hero-intro *::after{animation-play-state:paused!important}
 
+/* Compact homepage section rhythm; preserve the full opening viewport. */
+#home > section{padding-block:clamp(28px,3.5vw,48px)}
+#home > section > .eyebrow:first-child{margin-top:0}
+#home .hero-intro{margin-bottom:calc(-1 * clamp(0px,calc(50svh - 260px),300px))}
+#home .hero-intro + section{position:relative;z-index:3}
+#home .grid-3,#home .work-grid{margin-top:28px}
+#home .more-row{margin-top:24px}
+/* Compact service cards with aligned icon/title and a soft six-second sweep. */
+#home .grid-3 > .card{
+  display:grid;grid-template-columns:46px minmax(0,1fr);
+  grid-template-rows:auto 1fr;column-gap:14px;row-gap:12px;
+  align-items:start;padding:24px;isolation:isolate;
+}
+#home .grid-3 > .card > .ico{grid-column:1;grid-row:1;margin:0}
+#home .grid-3 > .card > h3{grid-column:2;grid-row:1;align-self:center}
+#home .grid-3 > .card > p{grid-column:1 / -1;margin:0}
+#home .grid-3 > .card::after{
+  content:"";position:absolute;top:-50%;bottom:-50%;left:-60%;width:40%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.03),transparent);
+  pointer-events:none;transform:translateX(0) skewX(-20deg);
+  animation:serviceLightSweep 6s linear infinite;
+}
+@keyframes serviceLightSweep{
+  0%{transform:translateX(0) skewX(-20deg);opacity:0}
+  8%{opacity:1}
+  92%{opacity:1}
+  100%{transform:translateX(500%) skewX(-20deg);opacity:0}
+}
+@media(prefers-reduced-motion:reduce){
+  #home .grid-3 > .card::after{animation:none;display:none}
+}
 </style>
 </head>
 <body>
@@ -697,7 +728,7 @@ html{scroll-behavior:smooth}
   <section class="wrap reveal" id="clients">
     <p class="eyebrow">Clients & collaborations</p>
     <h2>Who I've worked with.</h2>
-    <p class="lead" style="margin-top:14px">Brands across banking, food, healthcare, property and lifestyle.</p>
+    <p class="lead" style="margin-top:6px">Brands across banking, food, healthcare, property and lifestyle.</p>
     <div class="marquee" aria-label="Client logos">
       <div class="track" id="trackA"></div>
       <div class="track rev" id="trackB"></div>
