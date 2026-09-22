@@ -816,6 +816,48 @@ html{scroll-behavior:smooth}
 .lab-tool p{margin-top:14px}
 .lab-open{margin-top:18px;padding:10px 20px;font-size:14.5px}
 #labs .grid-3{grid-template-columns:minmax(0,380px);margin-top:32px}
+
+/* Mobile: retain the desktop header hierarchy without a second navigation row. */
+@media(max-width:600px){
+  .nav{
+    flex-wrap:nowrap;justify-content:space-between;gap:7px;
+    padding:9px max(10px,env(safe-area-inset-left,0px));
+  }
+  .mark{margin-right:0;flex:0 0 auto}
+  .mark .dot{width:28px;height:28px}
+  .seg{order:0;width:auto;min-width:0;flex:1 1 auto;padding:3px;gap:0}
+  .seg button{min-width:0;flex:1 1 0;padding:8px 2px;font-size:11.5px}
+  .seg-pill{top:3px;bottom:3px}
+  .nav-cta{flex:0 0 auto;padding:8px 11px;font-size:12px}
+
+  /* A shorter scroll runway removes the empty mobile-only gap after the cards. */
+  #home .hero-intro{height:130svh;margin-bottom:-38svh}
+  #home .hero-stage{height:100svh}
+  #home .hero-inner{width:calc(100% - 24px)}
+  #home .hero h1{font-size:clamp(29px,8.25vw,40px)}
+  .hero-identity{font-size:clamp(9px,2.6vw,12px);white-space:nowrap;margin-bottom:20px}
+  .hero-details .cta-row{gap:9px;flex-wrap:nowrap}
+  .hero-details .btn{font-size:12px;padding:11px 14px;white-space:nowrap}
+  #deck{width:100%;gap:8px;margin-top:25px}
+  #deck .chip{min-width:0;border-radius:19px;padding:10px 3px}
+  #deck .chip b{font-size:clamp(25px,9vw,36px)}
+  #deck .chip span{font-size:10px;white-space:nowrap}
+  .scroll-cue{bottom:max(18px,env(safe-area-inset-bottom,0px))}
+}
+
+/* Keep compositing cheap while the page is moving. */
+body.scroll-active .aurora span{animation-play-state:paused!important}
+body.scroll-active .nav{
+  backdrop-filter:none;-webkit-backdrop-filter:none;
+  background:rgba(8,8,10,.94);
+}
+@media(max-width:600px){
+  /* Large animated blur layers are costly on mobile GPUs. The static gradients
+     preserve the same atmosphere without repainting every scroll frame. */
+  .hero-stage > .aurora{filter:blur(34px);opacity:.48}
+  .hero-stage > .aurora span{animation:none!important;will-change:auto}
+  .nav{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(8,8,10,.94)}
+}
 </style>
 </head>
 <body>
@@ -3026,8 +3068,12 @@ document.addEventListener('visibilitychange',function(){syncHeroActivity();syncT
 (function(){
   var hero=document.querySelector('.hero-intro'),details=document.querySelector('.hero-details');
   var home=document.getElementById('home'),motion=matchMedia('(prefers-reduced-motion:reduce)');
-  var progress=0,target=0,frame=0,lastTime=0;
+  var progress=0,target=0,frame=0,lastTime=0,heroStart=hero.offsetTop,scrollEndTimer=0;
   function clamp(v){return Math.max(0,Math.min(1,v));}
+  function readTarget(){
+    var runway=innerWidth<=600?innerHeight*.27:innerHeight*.55;
+    return home.classList.contains('on')?clamp((scrollY-heroStart)/runway):0;
+  }
   function paint(time){
     var elapsed=lastTime?Math.min(time-lastTime,64):16;lastTime=time;
     progress=motion.matches?target:progress+(target-progress)*(1-Math.exp(-elapsed/110));
@@ -3048,15 +3094,31 @@ document.addEventListener('visibilitychange',function(){syncHeroActivity();syncT
     if(progress!==target)frame=requestAnimationFrame(paint);else{frame=0;lastTime=0;}
   }
   function updateIntro(){
-    target=home.classList.contains('on')?clamp(-hero.getBoundingClientRect().top/(innerHeight*.55)):0;
+    target=readTarget();
     if(!frame)frame=requestAnimationFrame(paint);
   }
-  window.addEventListener('scroll',updateIntro,{passive:true});
-  window.addEventListener('resize',updateIntro);
+  function onScroll(){
+    if(!document.body.classList.contains('scroll-active'))document.body.classList.add('scroll-active');
+    clearTimeout(scrollEndTimer);
+    scrollEndTimer=setTimeout(function(){document.body.classList.remove('scroll-active');},120);
+    updateIntro();
+  }
+  function onResize(){heroStart=hero.offsetTop;updateIntro();}
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onResize,{passive:true});
   window.addEventListener('load',updateIntro);
+  window.addEventListener('pageshow',function(){
+    // Refresh and back/forward navigation can restore the old scroll offset.
+    // Start from that exact state so the hero never visibly snaps into place.
+    heroStart=hero.offsetTop;target=readTarget();progress=target;lastTime=0;
+    if(frame){cancelAnimationFrame(frame);frame=0;}
+    paint(performance.now());
+  });
   motion.addEventListener('change',updateIntro);
   new MutationObserver(updateIntro).observe(home,{attributes:true,attributeFilter:['class']});
-  updateIntro();
+  // Match the first rendered frame to any already-restored scroll position.
+  // Normal user scrolling remains smoothly interpolated by updateIntro().
+  target=readTarget();progress=target;paint(performance.now());
 })();
 </script>
 <script>
