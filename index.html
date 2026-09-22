@@ -632,6 +632,28 @@ html{scroll-behavior:smooth}
 #deck .chip{backdrop-filter:none;-webkit-backdrop-filter:none}
 .hero-idle .hero-intro *,.hero-idle .hero-intro *::before,.hero-idle .hero-intro *::after{animation-play-state:paused!important}
 
+/* A quiet first-frame prompt so visitors know the opening is scroll-driven. */
+.scroll-cue{
+  position:absolute;z-index:3;left:50%;bottom:max(28px,env(safe-area-inset-bottom,0px));
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  color:rgba(255,255,255,.58);font-size:11px;font-weight:600;letter-spacing:.18em;
+  text-transform:uppercase;transform:translateX(-50%);pointer-events:none;
+  opacity:1;transition:opacity .45s ease,visibility .45s ease;
+  animation:scrollCueFade 2.4s ease-in-out infinite;
+}
+.scroll-cue::after{
+  content:"";width:7px;height:7px;border-right:1.5px solid currentColor;
+  border-bottom:1.5px solid currentColor;transform:rotate(45deg);
+  animation:scrollCueDrop 2.4s ease-in-out infinite;
+}
+.intro-revealed .scroll-cue{opacity:0;visibility:hidden;animation:none}
+@keyframes scrollCueFade{0%,100%{opacity:.32}50%{opacity:.88}}
+@keyframes scrollCueDrop{0%,100%{translate:0 -2px}50%{translate:0 5px}}
+@media(prefers-reduced-motion:reduce){
+  .scroll-cue,.scroll-cue::after{animation:none}
+  .scroll-cue{opacity:.65}
+}
+
 /* Compact homepage section rhythm; preserve the full opening viewport. */
 #home > section{padding-block:clamp(28px,3.5vw,48px)}
 #home > section > .eyebrow:first-child{margin-top:0}
@@ -826,7 +848,7 @@ html{scroll-behavior:smooth}
       </div>
 
 
-    </div></div></div></div>
+    </div></div><div class="scroll-cue" aria-hidden="true">Scroll to explore</div></div></div>
 
   <section class="wrap craft-intro" aria-label="Services">
     <p class="eyebrow">What I do</p>
