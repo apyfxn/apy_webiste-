@@ -494,7 +494,7 @@ footer{border-top:1px solid var(--line);padding:38px 0 46px;color:var(--muted);f
 
 /* ---------- "More" button + all-work page ---------- */
 .more-row{display:flex;justify-content:center;margin-top:32px}
-.works-head{padding-top:clamp(34px,5vw,60px);padding-bottom:clamp(56px,8vw,96px)}
+.works-head{padding-top:18px;padding-bottom:clamp(56px,8vw,96px)}
 .back-link{display:inline-flex;align-items:center;gap:6px;margin-bottom:22px;padding:6px 12px 6px 8px;border-radius:999px;color:var(--muted);font-size:14px;font-weight:600;transition:color .2s,background .2s}
 .back-link:hover{color:#fff;background:rgba(255,255,255,.07)}
 
@@ -847,17 +847,163 @@ html{scroll-behavior:smooth}
 
 /* Keep compositing cheap while the page is moving. */
 body.scroll-active .aurora span{animation-play-state:paused!important}
-body.scroll-active .nav{
-  backdrop-filter:none;-webkit-backdrop-filter:none;
-  background:rgba(8,8,10,.94);
-}
 @media(max-width:600px){
   /* Large animated blur layers are costly on mobile GPUs. The static gradients
      preserve the same atmosphere without repainting every scroll frame. */
   .hero-stage > .aurora{filter:blur(34px);opacity:.48}
   .hero-stage > .aurora span{animation:none!important;will-change:auto}
-  .nav{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(8,8,10,.94)}
+  .nav{backdrop-filter:saturate(180%) blur(22px);-webkit-backdrop-filter:saturate(180%) blur(22px);background:rgba(8,8,10,.62)}
 }
+
+/* About me: a continuation of the existing More pages. */
+.about-invite{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:32px;padding:25px 28px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg-2)}
+.about-invite p{margin:0;color:var(--muted);font-size:14px}
+.about-invite strong{display:block;color:var(--ink);font-size:19px;margin-bottom:5px;font-weight:600}
+.about-button{isolation:isolate;position:relative;flex-shrink:0;display:inline-flex;align-items:center;gap:28px;padding:14px 24px;border-radius:999px;border:1px solid rgba(195,155,255,.5);background:linear-gradient(110deg,#1546aa,#7440a7,#215ba6,#1546aa);background-size:300% 100%;color:#fff;font-size:15px;font-weight:600;animation:aboutGradient 6s linear infinite,aboutGlow 4s ease-in-out infinite}
+.about-button::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.32) 48%,transparent 65%);background-size:300% 100%;animation:aboutSweep 4s linear infinite}
+.about-button:hover{border-color:#ddd0ff}
+@keyframes aboutGradient{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes aboutSweep{0%{background-position:150% 0}100%{background-position:-150% 0}}
+@keyframes aboutGlow{0%,100%{box-shadow:0 0 20px rgba(89,95,255,.2)}50%{box-shadow:0 0 34px rgba(139,92,246,.45)}}
+.cv-intro{margin:16px 0 0;max-width:68ch}
+.cv-nav{display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 0}
+.cv-nav a{display:inline-block}
+.cv-section{margin-top:24px;padding:clamp(22px,3vw,34px);border:1px solid var(--line);border-radius:var(--radius-xl);background:var(--bg-2)}
+.cv-section>h3{font-size:23px;letter-spacing:-.03em;margin:0 0 20px}
+.cv-entry{display:grid;grid-template-columns:170px minmax(0,1fr);gap:28px;padding:26px 0;border-top:1px solid var(--line)}
+.cv-date{font-size:13px;color:var(--muted);padding-top:4px}
+.cv-entry h4{font-size:19px;line-height:1.4;margin:0 0 6px;font-weight:600}
+.cv-entry p{margin:0;color:var(--muted);font-size:15px}
+.cv-entry ul{margin:12px 0 0;padding-left:18px;color:var(--muted);font-size:15px;line-height:1.8}
+.cv-skills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.cv-skill{padding:22px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg-2)}
+.cv-skill h4{font-size:16px;margin:0 0 8px}
+.cv-skill p{font-size:14px;color:var(--muted);margin:0;line-height:1.7}
+.cv-contact{margin-top:40px;padding-top:28px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:20px}
+.cv-contact p{color:var(--muted);font-size:15px;margin:0}
+@media(max-width:620px){.about-invite{flex-direction:column;align-items:flex-start;padding:22px}.about-button{width:100%;justify-content:space-between}.cv-entry{grid-template-columns:1fr;gap:8px}.cv-skills{grid-template-columns:1fr}.cv-contact{align-items:flex-start;flex-direction:column}}
+@media(prefers-reduced-motion:reduce){.about-button,.about-button::after{animation:none}.about-button{box-shadow:0 0 24px rgba(139,92,246,.3)}}
+
+
+/* Compact headers shared by About Me and both More pages. */
+.works-head > .back-link{margin-bottom:10px}
+.works-head > .eyebrow{margin-top:0}
+.about-button-row{display:flex;justify-content:center;margin-top:28px}
+.about-button-row .about-button{width:auto}
+.cv-section .cv-entry:last-child{padding-bottom:0}
+.cv-section .cv-skill{background:var(--glass)}
+
+
+/* Horizontal CV entries with a comfortable stacked layout on smaller screens. */
+#cvExperience,#cvEducation{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:24px}
+#cvExperience>h3,#cvEducation>h3{grid-column:1 / -1}
+#about .cv-entry{grid-template-columns:minmax(0,1fr);align-content:start;gap:12px;padding:22px 0 0;min-width:0}
+#about .cv-entry h4{font-size:18px;overflow-wrap:break-word}
+.toolkit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.toolkit-app{display:flex;align-items:center;gap:16px;font-size:16px;font-weight:600}
+.toolkit-icon{display:grid;place-items:center;flex-shrink:0;width:58px;height:58px;border-radius:13px;font-size:27px;font-weight:600;letter-spacing:-1px;border:1px solid rgba(153,153,255,.3)}
+.toolkit-ae,.toolkit-pr{color:#9999ff;background:#00005b}
+.toolkit-ps{color:#31a8ff;background:#001e36;border-color:rgba(49,168,255,.3)}
+/* Equal space above and below the lower button, centered in the page width. */
+#home > #clients{padding-bottom:0}
+#home > #homeContact{padding-top:0}
+#home > .about-button-row{display:flex;align-items:center;justify-content:center;margin-block:0;padding-block:clamp(56px,7vw,88px)}
+#home > .about-button-row .about-button{width:auto;margin-inline:auto;justify-content:center}
+@media(max-width:800px){#cvExperience,#cvEducation{grid-template-columns:1fr}#about .cv-entry{padding-top:22px;margin-top:22px}#about .cv-entry:first-of-type{margin-top:0}.toolkit-grid{grid-template-columns:1fr;gap:22px}}
+
+/* Restoring a scrolled home view must not animate its sticky hero ancestor. */
+#home.view.on{animation:none}
+.cv-back-row{display:flex;justify-content:center;margin-top:32px;padding-top:28px;border-top:1px solid var(--line)}
+
+/* Career highlights complement the opening portfolio section. */
+.career-highlights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:clamp(36px,5vw,64px);border:1px solid var(--line);border-radius:var(--radius-xl);background:var(--bg-2);overflow:hidden}
+.career-highlight{padding:clamp(22px,3vw,34px);text-align:center}
+.career-highlight + .career-highlight{border-left:1px solid var(--line)}
+.career-highlight strong{display:block;font-size:clamp(25px,3.3vw,39px);line-height:1.2;letter-spacing:-.04em;font-weight:700}
+.career-highlight span{display:block;color:var(--muted);font-size:14px;margin-top:10px;line-height:1.5}
+.expertise-intro{color:var(--muted);font-size:15px;line-height:1.7;margin:0 0 22px;max-width:70ch}
+.cv-skill ul{padding-left:18px;margin:12px 0 0;color:var(--muted);font-size:14px;line-height:1.85}
+@media(max-width:620px){.career-highlights{grid-template-columns:1fr}.career-highlight + .career-highlight{border-left:0;border-top:1px solid var(--line)}.career-highlight{padding:22px}}
+
+
+/* Refined independent highlights and the relocated About invitation. */
+.career-highlights{gap:16px;border:0;background:none;overflow:visible}
+.career-highlight{position:relative;overflow:hidden;text-align:left;border:1px solid var(--line);border-radius:22px;background:radial-gradient(ellipse at 100% 0%,rgba(78,112,235,.12),transparent 70%),linear-gradient(145deg,#111115,#08080a);padding:28px;display:flex;flex-direction:column;align-items:flex-start}
+.career-highlight:nth-child(2){background:radial-gradient(ellipse at 100% 0%,rgba(156,101,238,.13),transparent 70%),linear-gradient(145deg,#111115,#08080a)}
+.career-highlight + .career-highlight{border-left:1px solid var(--line)}
+.career-highlight .highlight-label{font-size:11px;letter-spacing:.13em;text-transform:uppercase;font-weight:600;color:#a6a6b3;margin:0 0 24px}
+.career-highlight strong{display:flex;align-items:baseline;gap:1px;font-size:clamp(46px,5vw,62px);font-weight:700;letter-spacing:-.055em;line-height:1}
+.career-highlight strong .highlight-plus{display:inline;font-size:.65em;color:#9bafff;margin:0}
+.career-highlight strong small{font-size:18px;letter-spacing:-.02em;font-weight:500;color:#b1b1bc;margin-left:10px}
+.career-highlight p{font-size:13px;color:var(--muted);margin:20px 0 0;line-height:1.6}
+.career-highlight .highlight-service{font-size:clamp(28px,3.2vw,38px);letter-spacing:-.04em;margin-top:4px}
+.highlight-disciplines{display:flex;align-items:center;gap:10px;margin-top:12px}
+.career-highlight .highlight-disciplines span{font-size:13px;color:#c6c6d2;margin:0}
+.highlight-disciplines i{font-size:12px;color:#686883;font-style:normal}
+.career-highlight:last-child p{margin-top:auto;padding-top:16px}
+#home > .about-feature{padding-block:clamp(40px,6vw,72px)}
+.about-feature .about-invite{margin-top:0}
+.hero-details .about-button{width:auto;justify-content:center}
+@media(max-width:800px) and (min-width:621px){.career-highlight{padding:22px 18px}.highlight-disciplines{gap:6px}.career-highlight strong small{font-size:15px;margin-left:6px}}
+@media(max-width:620px){.career-highlights{gap:12px}.career-highlight{padding:24px}.career-highlight .highlight-label{margin-bottom:18px}.hero-details .about-button{gap:14px;width:auto}}
+
+
+/* Compact highlights below the three service cards. */
+.craft-intro .career-highlights{margin:22px 0 0;gap:16px}
+.craft-intro .career-highlight{padding:20px 24px;border-radius:18px;justify-content:flex-start}
+.craft-intro .career-highlight .highlight-label{display:inline-flex;align-items:center;gap:8px;margin:0 0 16px;color:#c9ccdf;font-size:12px;font-weight:600;letter-spacing:.02em;text-transform:none;line-height:1.4}
+.craft-intro .career-highlight .highlight-label::before{content:'';width:6px;height:6px;border-radius:50%;background:#91a8ff;box-shadow:0 0 10px rgba(145,168,255,.25)}
+.craft-intro .career-highlight:nth-child(2) .highlight-label::before{background:#b49aee}
+.craft-intro .career-highlight strong{font-size:42px}
+.craft-intro .career-highlight strong small{font-size:16px}
+.craft-intro .career-highlight .highlight-service{font-size:28px;margin:0}
+.craft-intro .highlight-disciplines{margin-top:8px}
+@media(max-width:800px) and (min-width:621px){.craft-intro .career-highlight{padding:18px 16px}.craft-intro .career-highlight .highlight-service{font-size:25px}}
+@media(max-width:620px){.craft-intro .career-highlights{gap:10px}.craft-intro .career-highlight{padding:18px 22px}.craft-intro .career-highlight .highlight-label{margin-bottom:12px}}
+
+
+/* Minimal, balanced career highlights. */
+.craft-intro .career-highlights{gap:12px;margin-top:18px}
+.craft-intro .career-highlight{padding:18px 20px;min-height:0;align-items:center;justify-content:center;text-align:center;border-radius:16px}
+.craft-intro .career-highlight strong{justify-content:center;font-size:40px;line-height:1.1}
+.craft-intro .career-highlight strong small{font-size:16px;margin-left:8px}
+.craft-intro .career-highlight .highlight-service{font-size:26px;line-height:1.1}
+.craft-intro .highlight-disciplines{justify-content:center;gap:8px;margin-top:6px}
+.craft-intro .career-highlight .highlight-disciplines span{font-size:12px;line-height:1.3}
+@media(max-width:620px){.craft-intro .career-highlights{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.craft-intro .career-highlight{padding:16px 12px}.craft-intro .career-highlight:last-child{grid-column:1 / -1;flex-direction:row;gap:18px;flex-wrap:wrap}.craft-intro .career-highlight strong{font-size:36px}.craft-intro .career-highlight .highlight-service{font-size:23px}.craft-intro .highlight-disciplines{margin-top:0;gap:7px}}
+
+
+/* Quiet credentials between the headline and identity. */
+.hero-credentials{display:flex;align-items:center;justify-content:center;gap:20px;margin:12px 0 16px;color:#b5b5bf;font-size:clamp(13px,1.4vw,18px);line-height:1.3;letter-spacing:.01em}
+.hero-credentials strong{color:var(--ink);font-size:1.2em;font-weight:700;letter-spacing:-.035em;margin-right:3px}
+.hero-credentials i{width:3px;height:3px;border-radius:50%;background:#7387c8;flex:none}
+@media(max-width:600px){.hero-credentials{gap:16px;margin:10px 0 13px;font-size:13px}}
+@media(max-height:520px){.hero-credentials{margin:4px 0 8px;font-size:12px}}
+
+
+/* Give career stats their own visual hierarchy above the identity line. */
+.hero-credentials{gap:clamp(24px,3vw,42px);margin:22px 0 32px;font-size:clamp(20px,2.2vw,30px);line-height:1.2;letter-spacing:-.02em}
+.hero-credentials>span{display:inline-flex;align-items:baseline;gap:9px}
+.hero-credentials strong{font-size:1.45em;line-height:1;font-weight:700;margin:0;letter-spacing:-.045em}
+.hero-credentials i{width:1px;height:26px;border-radius:0;background:rgba(150,169,221,.4)}
+@media(max-width:600px){.hero-credentials{gap:22px;margin:18px 0 26px;font-size:19px}.hero-credentials>span{gap:6px}.hero-credentials strong{font-size:1.45em}.hero-credentials i{height:22px}}
+@media(max-height:520px){.hero-credentials{gap:20px;margin:10px 0 16px;font-size:18px}.hero-credentials i{height:20px}}
+
+/* Smaller hero app tiles, retaining their existing finish and movement. */
+#deck{gap:clamp(10px,1.8vw,18px)}
+#deck .chip{width:clamp(78px,12vw,104px);border-radius:20px;padding:10px 5px;row-gap:8px}
+#deck .chip b{font-size:clamp(26px,3vw,32px)}
+#deck .chip span{font-size:10px}
+@media(max-width:600px){#deck{gap:10px}#deck .chip{width:80px;border-radius:16px;padding:9px 3px;row-gap:7px}#deck .chip b{font-size:27px}#deck .chip span{font-size:9px}}
+/* Match hero CTA dimensions and align both arrows at the same inset. */
+#home .hero-details .cta-row > .btn{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:space-between;width:160px;min-height:52px;padding:14px 24px;gap:16px;flex:0 0 auto}
+#home .hero-details .cta-row > .btn > span{flex:0 0 auto;margin-left:auto}
+@media(max-width:600px){#home .hero-details .cta-row > .btn{width:140px;min-height:44px;padding:11px 18px;gap:12px}}
+/* Brighter animated About Me buttons. */
+.about-button{background-image:linear-gradient(110deg,#3269ed,#9251db,#267bdc,#3269ed);border-color:rgba(194,178,255,.8)}
+@keyframes aboutGlow{0%,100%{box-shadow:0 0 24px rgba(99,103,255,.34),inset 0 1px 0 rgba(255,255,255,.17)}50%{box-shadow:0 0 38px rgba(145,99,255,.55),inset 0 1px 0 rgba(255,255,255,.22)}}
+.about-button:hover{border-color:#e0d7ff;filter:brightness(1.08)}
+@media(prefers-reduced-motion:reduce){.about-button{box-shadow:0 0 26px rgba(122,103,255,.38)}}
 </style>
 </head>
 <body>
@@ -881,8 +1027,9 @@ body.scroll-active .nav{
   <div class="hero hero-intro"><div class="hero-stage"><div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div><div class="wrap hero-inner">
     <h1><span class="frame-white">Every frame.</span> <em class="feeling-blue">a feeling.</em></h1>
     <div class="hero-details" inert aria-hidden="true">
-      <p class="hero-identity">ANIL PANDEY - VIDEO EDITOR &amp; MOTION DESIGNER</p>
-      <div class="cta-row"><a class="btn btn-primary" href="#work">See selected work</a><button class="btn btn-ghost js-contact hire-shine">Hire me <span aria-hidden="true">&#8599;</span></button></div>
+      <p class="hero-credentials" aria-label="4 plus years of professional editing experience, 30 plus brands"><span><strong>4+</strong> years</span><i aria-hidden="true"></i><span><strong>30+</strong> brands</span></p>
+
+      <div class="cta-row"><button class="btn about-button" type="button" data-go="about">About Me <span aria-hidden="true">&#8599;</span></button><button class="btn btn-ghost js-contact hire-shine">Hire me <span aria-hidden="true">&#8599;</span></button></div>
       <div class="deck" id="deck">
         <div class="chip ae"><b>Ae</b><span>After Effects</span></div>
         <div class="chip pr"><b>Pr</b><span>Premiere Pro</span></div>
@@ -893,6 +1040,7 @@ body.scroll-active .nav{
     </div></div><div class="scroll-cue" aria-hidden="true">Scroll to explore</div></div></div>
 
   <section class="wrap craft-intro" aria-label="Services">
+
     <p class="eyebrow">What I do</p>
     <h2>Three things, done properly.</h2>
     <div class="grid-3">
@@ -912,6 +1060,7 @@ body.scroll-active .nav{
         <p>Grading that sets the mood and a mix that sits right — dialogue forward, music under, no clipping on a phone speaker.</p>
       </div>
     </div>
+
   </section>
 
   <section class="wrap reveal" id="work">
@@ -930,9 +1079,17 @@ body.scroll-active .nav{
       <div class="track rev" id="trackB"></div>
     </div>
     <div class="more-row"><button class="nav-cta" data-go="brands">More</button></div>
+
   </section>
 
-  <section class="wrap reveal">
+  <div class="wrap about-feature">
+    <div class="about-invite" id="aboutInvite">
+      <div><strong>Behind the frames.</strong><p>My experience, education &amp; the skills behind the work.</p></div>
+      <button class="about-button" type="button" data-go="about">About Me <span aria-hidden="true">&#8599;</span></button>
+    </div>
+  </div>
+
+  <section class="wrap reveal" id="homeContact">
     <div class="card" style="padding:clamp(30px,5vw,54px);text-align:center">
       <h2>Have footage sitting in a folder?</h2>
       <p class="lead" style="margin:14px auto 26px;text-align:center">Send the brief, the deadline and the reference. You get a first cut you can actually react to.</p>
@@ -942,6 +1099,51 @@ body.scroll-active .nav{
 </main>
 
 <!-- ══════════ ALL WORK ══════════ -->
+
+<main class="view" id="about" aria-labelledby="aboutTitle">
+  <section class="wrap works-head">
+    <button class="back-link" id="backAbout" type="button"><span aria-hidden="true">&#8249;</span> Back</button>
+    <p class="eyebrow">About me</p>
+    <h2 id="aboutTitle" tabindex="-1">The person behind the frames.</h2>
+    <p class="lead cv-intro">I'm Anil Pandey, a video editor and motion designer based in Kathmandu, with 4+ years of professional editing experience and collaborations with 30+ brands. I bring creative ideas to life through editing, animation and digital content, with a focus on cinematic pacing and engaging visual storytelling.</p>
+    <nav class="cv-nav" aria-label="On this page"><button type="button" class="cat-btn" data-cvjump="cvExperience">Experience</button><button type="button" class="cat-btn" data-cvjump="cvEducation">Education</button><button type="button" class="cat-btn" data-cvjump="cvExpertise">Expertise</button><button type="button" class="cat-btn" data-cvjump="cvToolkit">Toolkit</button></nav>
+    <section class="cv-section" id="cvExperience" aria-labelledby="experienceTitle">
+      <h3 id="experienceTitle">Work experience</h3>
+      <article class="cv-entry"><div class="cv-date">2023 &ndash; Present</div><div><h4>Video Editor</h4><p>Marco Nepal Pvt. Ltd.</p><ul><li>Produce and edit videos with cinematic pacing and polished final cuts.</li><li>Design motion graphics to enhance storytelling and visual appeal.</li><li>Enhance video quality through color grading and sound design.</li></ul></div></article>
+      <article class="cv-entry"><div class="cv-date">Freelance</div><div><h4>Video Editing, Motion Graphics &amp; Typography Animation</h4><ul><li>Create lyrical videos for artists including UNIQ POET, Ocen and Barsha Karmacharya.</li><li>Create engaging quiz videos and fast-cut short edits.</li></ul></div></article>
+      <article class="cv-entry"><div class="cv-date">Digital advertising</div><div><h4>Digital Ad Design</h4><p>Designed digital ads and graphics for a dropshipping and social media marketing company.</p></div></article>
+    </section>
+    <section class="cv-section" id="cvEducation" aria-labelledby="educationTitle">
+      <h3 id="educationTitle">Education</h3>
+      <article class="cv-entry"><div class="cv-date">Present</div><div><h4>Bachelor of Computer Science</h4><p>IIMS College &ndash; UCSI University</p></div></article>
+      <article class="cv-entry"><div class="cv-date">Jul 2016 &ndash; Nov 2018</div><div><h4>National Examinations Board (HSEB)</h4><p>Himalayan Whitehouse International Secondary School<br>New Baneshwor, Kathmandu</p><ul><li>Major: Science</li><li>GPA: 2.54</li></ul></div></article>
+      <article class="cv-entry"><div class="cv-date">May 2008 &ndash; Mar 2016</div><div><h4>National Examinations Board (SLC)</h4><p>Daunne English Boarding Secondary School<br>Bardghat - 4, Nawalparasi</p><ul><li>GPA: 2.95</li></ul></div></article>
+    </section>
+    <section class="cv-section" id="cvExpertise" aria-labelledby="expertiseTitle">
+      <h3 id="expertiseTitle">My expertise</h3>
+      <p class="expertise-intro">From documentary storytelling to fast-paced creator content, I shape the edit around the audience, the message and the platform.</p>
+      <div class="cv-skills">
+        <article class="cv-skill"><h4>Documentary &amp; YouTube</h4><ul><li>Documentary edits</li><li>YouTube videos</li><li>Long-form storytelling</li><li>Cinematic pacing</li></ul></article>
+        <article class="cv-skill"><h4>Sales &amp; brand content</h4><ul><li>Sales videos</li><li>SaaS-style edits</li><li>Brand &amp; promotional videos</li><li>Digital ads</li></ul></article>
+        <article class="cv-skill"><h4>Podcasts &amp; creator edits</h4><ul><li>Podcast edits</li><li>Fast-cut edits</li><li>Iman Gadzhi-inspired edits</li><li>Short-form social videos</li></ul></article>
+        <article class="cv-skill"><h4>Motion &amp; animation</h4><ul><li>2D animation</li><li>Motion graphics</li><li>Character animation</li><li>Logo animation &amp; transitions</li></ul></article>
+        <article class="cv-skill"><h4>Typography &amp; music</h4><ul><li>Kinetic typography</li><li>Lyrical videos</li><li>Music video edits</li><li>Beat-synced cuts</li></ul></article>
+        <article class="cv-skill"><h4>Color &amp; sound</h4><ul><li>Color grading &amp; correction</li><li>Sound design</li><li>Dialogue &amp; music balancing</li><li>Final edit polish</li></ul></article>
+      </div>
+
+    </section>
+    <section class="cv-section" id="cvToolkit" aria-labelledby="toolkitTitle">
+      <h3 id="toolkitTitle">My toolkit</h3>
+      <div class="toolkit-grid">
+        <div class="toolkit-app"><span class="toolkit-icon toolkit-ae" aria-hidden="true">Ae</span><span>After Effects</span></div>
+        <div class="toolkit-app"><span class="toolkit-icon toolkit-pr" aria-hidden="true">Pr</span><span>Premiere Pro</span></div>
+        <div class="toolkit-app"><span class="toolkit-icon toolkit-ps" aria-hidden="true">Ps</span><span>Photoshop</span></div>
+      </div>
+    </section>
+    <div class="cv-back-row"><button class="btn btn-ghost" id="backAboutBottom" type="button"><span aria-hidden="true">&#8249;</span> Back</button></div>
+  </section>
+</main>
+
 <main class="view" id="works">
   <section class="wrap works-head">
     <button class="back-link" id="backWork" type="button"><span aria-hidden="true">&#8249;</span> Back</button>
@@ -2745,11 +2947,12 @@ function showView(id, keepScroll){
   currentView = id;
   views.forEach(function(v){ v.classList.toggle('on', v.id === id); });
   segBtns.forEach(function(b){
-    if(b.dataset.go === ((id === 'works' || id === 'brands') ? 'home' : id)) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
+    if(b.dataset.go === ((id === 'works' || id === 'brands' || id === 'about') ? 'home' : id)) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
   });
   movePill();
   if(!keepScroll) jumpToSavedScroll(0);
   reveal();
+  if(id === 'about') document.getElementById('aboutTitle').focus({preventScroll:true});
 }
 function saveRouteScroll(){
   var state = Object.assign({}, history.state);
@@ -2761,7 +2964,7 @@ function saveRouteScroll(){
 function go(id, keepScroll){
   if(id === currentView) return;
   saveRouteScroll();
-  var returningHome = id === 'home' && (currentView === 'works' || currentView === 'brands');
+  var returningHome = id === 'home' && (currentView === 'works' || currentView === 'brands' || currentView === 'about');
   var destinationY = returningHome ? (viewScrollPositions.home || 0) : 0;
   history.pushState({apyView:id, scrollY:destinationY, fromView:currentView}, '');
   showView(id, keepScroll || returningHome);
@@ -2784,6 +2987,8 @@ function backFromMore(section){
     else if(target) target.scrollIntoView({behavior:'instant'});
   }
 }
+document.querySelectorAll('[data-cvjump]').forEach(function(b){ b.addEventListener('click', function(){ document.getElementById(b.dataset.cvjump).scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth'}); }); });
+document.querySelectorAll('#backAbout, #backAboutBottom').forEach(function(b){ b.addEventListener('click', function(){ backFromMore('aboutInvite'); }); });
 window.addEventListener('popstate', function(e){ restoreRoute(e.state); });
 // Wait until the grids and reveal observer are initialized before restoring a reload.
 var initialRoute = history.state;
@@ -3103,7 +3308,7 @@ document.addEventListener('visibilitychange',function(){syncHeroActivity();syncT
     scrollEndTimer=setTimeout(function(){document.body.classList.remove('scroll-active');},120);
     updateIntro();
   }
-  function onResize(){heroStart=hero.offsetTop;updateIntro();}
+  function onResize(){if(home.classList.contains('on')) heroStart=hero.offsetTop;updateIntro();}
   window.addEventListener('scroll',onScroll,{passive:true});
   window.addEventListener('resize',onResize,{passive:true});
   window.addEventListener('load',updateIntro);
@@ -3115,7 +3320,14 @@ document.addEventListener('visibilitychange',function(){syncHeroActivity();syncT
     paint(performance.now());
   });
   motion.addEventListener('change',updateIntro);
-  new MutationObserver(updateIntro).observe(home,{attributes:true,attributeFilter:['class']});
+  function syncRestoredIntro(){
+    // Route changes restore scroll synchronously; snap before the next paint.
+    if(frame){cancelAnimationFrame(frame);frame=0;}
+    if(home.classList.contains('on')) heroStart=hero.offsetTop;
+    target=readTarget();progress=target;lastTime=0;
+    paint(performance.now());
+  }
+  new MutationObserver(syncRestoredIntro).observe(home,{attributes:true,attributeFilter:['class']});
   // Match the first rendered frame to any already-restored scroll position.
   // Normal user scrolling remains smoothly interpolated by updateIntro().
   target=readTarget();progress=target;paint(performance.now());
@@ -3141,7 +3353,7 @@ document.addEventListener('visibilitychange',function(){syncHeroActivity();syncT
   window.addEventListener('resize',schedule);
   window.addEventListener('load',schedule);
   motion.addEventListener('change',schedule);
-  new MutationObserver(schedule).observe(home,{attributes:true,attributeFilter:['class']});
+  new MutationObserver(function(){if(frame){cancelAnimationFrame(frame);frame=0;}paint();}).observe(home,{attributes:true,attributeFilter:['class']});
   paint();
 })();
 </script>
