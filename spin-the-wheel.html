@@ -160,6 +160,7 @@
     backdrop-filter:blur(4px);
     box-shadow:0 6px 20px rgba(0,0,0,.4);
   }
+  .admin-toggle-wrap[hidden]{display:none;}
   .admin-toggle{
     appearance:none;
     border:none;
@@ -369,7 +370,7 @@
     </div>
   </div>
 
-  <div class="admin-toggle-wrap">
+  <div class="admin-toggle-wrap" id="settingsWrap" hidden>
     <button id="adminToggle" class="admin-toggle">⚙</button>
     <div class="admin-panel" id="adminPanel">
       <input type="text" id="winnerInput" placeholder="winner name">
@@ -480,6 +481,14 @@ winnerInput.addEventListener('keydown', (e)=>{
   if(e.key === 'Enter') setWinner();
 });
 
+const settingsWrap = document.getElementById('settingsWrap');
+document.addEventListener('keydown', (e)=>{
+  if(e.ctrlKey && e.shiftKey && !e.altKey && !e.metaKey && e.key.toLowerCase() === 's'){
+    e.preventDefault();
+    if(e.repeat) return;
+    settingsWrap.hidden = !settingsWrap.hidden;
+  }
+}, true);
 const adminToggle = document.getElementById('adminToggle');
 const adminPanel = document.getElementById('adminPanel');
 adminToggle.addEventListener('click', ()=>{
@@ -526,8 +535,46 @@ function pickWinnerIndex(){
   return Math.floor(Math.random()*names.length);
 }
 
+// Unlock audio on the spin click so it can play when the animation finishes.
+let celebrationAudio;
+function prepareCelebrationAudio(){
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if(!AudioContextClass) return;
+  try{
+    if(!celebrationAudio) celebrationAudio = new AudioContextClass();
+    if(celebrationAudio.state === 'suspended') celebrationAudio.resume().catch(()=>{});
+  }catch(error){}
+}
+
+function playCelebrationSound(){
+  if(!celebrationAudio || celebrationAudio.state !== 'running') return;
+  const audio = celebrationAudio;
+  const start = audio.currentTime;
+  const master = audio.createGain();
+  master.gain.value = 0.22;
+  master.connect(audio.destination);
+
+  // A short confetti pop.
+  const buffer = audio.createBuffer(1, Math.ceil(audio.sampleRate * 0.22), audio.sampleRate);
+  const samples = buffer.getChannelData(0);
+  for(let i = 0; i < samples.length; i++){
+    samples[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / samples.length, 3);
+  }
+  const pop = audio.createBufferSource();
+  pop.buffer = buffer;
+  const filter = audio.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.value = 2400;
+  pop.connect(filter);
+  filter.connect(master);
+  pop.start(start);
+
+  setTimeout(()=>master.disconnect(), 500);
+}
+
 function spin(){
   if(spinning || names.length === 0) return;
+  prepareCelebrationAudio();
   spinning = true;
   spinBtn.disabled = true;
   meta.textContent = "Spinning…";
@@ -579,6 +626,7 @@ function announceWinner(name){
   winnerNameEl.textContent = "@" + name;
   modalOverlay.classList.add('show');
   launchConfetti();
+  playCelebrationSound();
 }
 
 closeModalBtn.addEventListener('click', ()=>{
